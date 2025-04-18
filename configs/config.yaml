@@ -1,18 +1,26 @@
-image_dir: ""
+# configs/config.yaml
+image_dir: "ecgImages"
 train_json: "train.json"
 val_json: "valid.json"
 test_json: "test.json"
 
-batch_size: 32
-learning_rate: 0.00005
-num_epochs: 10
+# Training parameters
+batch_size: 16
+learning_rate: 3e-5
+weight_decay: 0.01
+num_epochs: 15
 max_seq_length: 64
+grad_accum_steps: 2
+freeze_bert: True
 
+# Model architecture
 device: "cuda"
-
 image_size: 512
 embedding_dim: 512
-fusion_hidden_dim: 256
-num_classes: 2  # yes or no
+fusion_hidden_dim: 512
+num_classes: 2
+num_attention_heads: 8
 
-model_save_path: "vqa_model.pth"
+# Paths
+model_save_path: "clinical_vqa_model.pth"
+checkpoint_path: "training_checkpoint.pth"

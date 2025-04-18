@@ -1,17 +1,23 @@
+# models/vqa_model.py
 import torch.nn as nn
-from models.image_encoder import ImageEncoder
-from models.text_encoder import TextEncoder
-from models.fusion import FusionModule
+from models.image_encoder import ClinicalImageEncoder
+from models.text_encoder import ClinicalTextEncoder
+from models.fusion import ClinicalFusion
 
-class VQAModel(nn.Module):
+class ClinicalVQAModel(nn.Module):
     def __init__(self, config):
-        super(VQAModel, self).__init__()
-        self.image_encoder = ImageEncoder(config['embedding_dim'])
-        self.text_encoder = TextEncoder(config['embedding_dim'])
-        self.fusion = FusionModule(
-            input_dim=2*config['embedding_dim'],
+        super().__init__()
+        
+        self.image_encoder = ClinicalImageEncoder(config['embedding_dim'])
+        self.text_encoder = ClinicalTextEncoder(
+            config['embedding_dim'],
+            freeze_bert=config.get('freeze_bert', True)
+        )
+        
+        self.fusion = ClinicalFusion(
+            emb_dim=config['embedding_dim'],
             hidden_dim=config['fusion_hidden_dim'],
-            output_dim=config['num_classes']
+            num_heads=config.get('num_attention_heads', 8)
         )
 
     def forward(self, image, input_ids, attention_mask):
