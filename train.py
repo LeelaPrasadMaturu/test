@@ -41,7 +41,7 @@ train_loader = DataLoader(
 model = ClinicalVQAModel(config).to(device)
 optimizer = AdamW(
     model.parameters(),
-    lr=config['learning_rate'],
+    lr=float(config['learning_rate']),
     weight_decay=config['weight_decay'],
     fused=True
 )
